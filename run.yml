@@ -2,7 +2,7 @@ version: "2"
 services:
   producer:
     build: ./producer
-    image: producer
+    image: retrohacker/presentation:producer
     links:
       - rabbitmq
     ports:
@@ -17,7 +17,7 @@ services:
       - producer
   consumer:
     build: ./consumer
-    image: consumer
+    image: retrohacker/presentation:consumer
     links:
       - rabbitmq
   rabbitmq:

@@ -19,9 +19,9 @@ help:
 
 build: clean
 	docker-compose -f ./run.yml build
-	docker tag consumer gcr.io/nodejs-microservices/consumer:latest
-	docker tag producer gcr.io/nodejs-microservices/producer:latest
-	docker tag nginx gcr.io/nodejs-microservices/nginx:latest
+	docker tag 5_consumer gcr.io/core-falcon-135017/consumer:latest
+	docker tag 5_producer gcr.io/core-falcon-135017/producer:latest
+	docker tag 5_nginx gcr.io/core-falcon-135017/nginx:latest
 
 run: build
 	docker-compose -f ./run.yml up
@@ -31,31 +31,31 @@ clean:
 	docker-compose -f ./test.yml rm -f
 
 clean-deploy: clean
-	gcloud config set project nodejs-microservices
-	gcloud container clusters get-credentials microservices
+	gcloud config set project core-falcon-135017
+	gcloud container clusters get-credentials presentation
 	kubectl delete -f kube.yml || true
 
 deploy: clean-deploy build
-	gcloud config set project nodejs-microservices
-	gcloud docker -- push gcr.io/nodejs-microservices/consumer:latest
-	gcloud docker -- push gcr.io/nodejs-microservices/producer:latest
-	gcloud docker -- push gcr.io/nodejs-microservices/nginx:latest
-	gcloud container clusters get-credentials microservices
+	gcloud config set project core-falcon-135017
+	gcloud docker push gcr.io/core-falcon-135017/consumer:latest
+	gcloud docker push gcr.io/core-falcon-135017/producer:latest
+	gcloud docker push gcr.io/core-falcon-135017/nginx:latest
+	gcloud container clusters get-credentials presentation
 	kubectl create -f kube.yml
 	kubectl get services
 	echo "Run `kubectl get services` to fetch NGinx's ip address"
 
 provision-cluster:
-	gcloud config set project nodejs-microservices
-	gcloud container clusters create microservices
+	gcloud config set project core-falcon-135017
+	gcloud container clusters create presentation
 
 delete-cluster:
-	gcloud config set project nodejs-microservices
-	gcloud container clusters delete microservices -q
+	gcloud config set project core-falcon-135017
+	gcloud container clusters delete presentation -q
 
 dashboard:
-	gcloud config set project nodejs-microservices
-	gcloud container clusters get-credentials microservices
+	gcloud config set project core-falcon-135017
+	gcloud container clusters get-credentials presentation
 	echo "Navigate to 127.0.0.1:8001/ui in your browser"
 	kubectl proxy
 

@@ -2,7 +2,7 @@ version: "2"
 services:
   producer:
     build: ./producer
-    image: gcr.io/nodejs-microservices:producer
+    image: retrohacker/presentation:producer
     links:
       - rabbitmq
     ports:
@@ -22,7 +22,7 @@ services:
   rabbitmq:
     image: rabbitmq
   integration:
-    image: gcr.io/nodejs-microservices:integration-test
+    image: retrohacker/presentation:integration-test
     build: ./test
     environment:
       - PRODUCER_HOST=nginx
